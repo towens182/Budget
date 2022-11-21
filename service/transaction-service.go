@@ -1,6 +1,12 @@
 package service
 
-import "github.com/towens182/budget/model"
+import (
+	"fmt"
+
+	"github.com/goccy/go-json"
+	"github.com/towens182/budget/data"
+	"github.com/towens182/budget/model"
+)
 
 type TransactionService interface {
 	GetAll() []model.Transaction
@@ -12,24 +18,21 @@ type transactionService struct {
 
 func New() TransactionService {
 
-	testList := []model.Transaction{
-		{
-			Description:  "Oil Change",
-			Cost:         20.00,
-			MainCategory: "Automotive",
-			SubCategory:  "Car Maintenence",
-			Year:         "2022",
-			Month:        "November",
-		},
+	var transactions []model.Transaction
+
+	data := data.LoadJsonFromLocalFileSystem()
+	fmt.Println(data)
+	err := json.Unmarshal(data, &transactions)
+	if err != nil {
+		// TODO handle this properly
+		panic(err)
 	}
 
 	return &transactionService{
-		transactions: testList,
+		transactions: transactions,
 	}
 }
 
 func (service *transactionService) GetAll() []model.Transaction {
-
-	// TODO gather the transactions from csv
 	return service.transactions
 }

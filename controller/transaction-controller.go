@@ -1,27 +1,21 @@
 package controller
 
 import (
-	"github.com/towens182/budget/model"
+	"github.com/gin-gonic/gin"
 	"github.com/towens182/budget/service"
 )
 
-type TransactionController interface {
-	// Add
-	GetAll() []model.Transaction
-}
+var (
+	transactionService service.TransactionService = service.New()
+)
 
-type controller struct {
-	service service.TransactionService
-}
-
-func New(service service.TransactionService) TransactionController {
-	return controller{
-		service: service,
+func GetAll(ctx *gin.Context) {
+	result := transactionService.GetAll()
+	if len(result) == 0 {
+		ctx.JSON(404, nil)
+	} else {
+		ctx.JSON(200, result)
 	}
-}
-
-func (c controller) GetAll() []model.Transaction {
-	return c.service.GetAll()
 }
 
 // Add (return the new video also)
