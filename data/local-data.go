@@ -1,10 +1,13 @@
 package data
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/towens182/budget/model"
 )
 
 // TODO: load this from env
@@ -21,4 +24,10 @@ func LoadJsonFromLocalFileSystem() []byte {
 	}
 	fmt.Println(data)
 	return data
+}
+
+func AddJsonToDataFile(newTransactions []model.Transaction) {
+	file, _ := json.MarshalIndent(newTransactions, "", " ")
+	_ = os.WriteFile(dataPath, file, 0644)
+	// TODO Handle error
 }

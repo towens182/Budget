@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/towens182/budget/model"
 	"github.com/towens182/budget/service"
 )
 
@@ -18,5 +19,14 @@ func GetAll(ctx *gin.Context) {
 	}
 }
 
-// Add (return the new video also)
-// ctx.BindJSON
+func AddTransaction(ctx *gin.Context) {
+	var newTransactions []model.Transaction
+
+	if err := ctx.BindJSON(&newTransactions); err != nil {
+		ctx.JSON(400, "invalid json")
+		return
+	}
+
+	transactionService.AddTransaction(newTransactions)
+	ctx.JSON(200, newTransactions)
+}
