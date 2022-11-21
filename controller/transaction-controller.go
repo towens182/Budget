@@ -6,20 +6,19 @@ import (
 	"github.com/towens182/budget/service"
 )
 
-var (
-	transactionService service.TransactionService = service.New()
-)
+type transactionController struct {
+	transactionService service.TransactionService
+}
 
-func GetAll(ctx *gin.Context) {
-	result := transactionService.GetAll()
-	if len(result) == 0 {
-		ctx.JSON(404, nil)
-	} else {
-		ctx.JSON(200, result)
+func NewTransactionController() Controller {
+	var s service.TransactionService = service.NewTransactionService()
+
+	return &transactionController{
+		transactionService: s,
 	}
 }
 
-func AddTransaction(ctx *gin.Context) {
+func (c *transactionController) Add(ctx *gin.Context) {
 	var newTransactions []model.Transaction
 
 	if err := ctx.BindJSON(&newTransactions); err != nil {
@@ -27,6 +26,15 @@ func AddTransaction(ctx *gin.Context) {
 		return
 	}
 
-	transactionService.AddTransaction(newTransactions)
+	c.transactionService.AddTransaction(newTransactions)
 	ctx.JSON(200, newTransactions)
+}
+
+func (c *transactionController) GetAll(ctx *gin.Context) {
+	result := c.transactionService.GetAll()
+	if len(result) == 0 {
+		ctx.JSON(404, nil)
+	} else {
+		ctx.JSON(200, result)
+	}
 }

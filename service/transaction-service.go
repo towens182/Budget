@@ -6,6 +6,9 @@ import (
 	"github.com/towens182/budget/model"
 )
 
+// TODO: load this from env, connect to a DB
+var transactionsFilePath = "data/transactions.json"
+
 type TransactionService interface {
 	AddTransaction([]model.Transaction) []model.Transaction
 	GetAll() []model.Transaction
@@ -15,11 +18,11 @@ type transactionService struct {
 	transactions []model.Transaction
 }
 
-func New() TransactionService {
+func NewTransactionService() TransactionService {
 
 	var transactions []model.Transaction
 
-	data := data.LoadJsonFromLocalFileSystem()
+	data := data.LoadJsonFromDataFile(transactionsFilePath)
 	err := json.Unmarshal(data, &transactions)
 	if err != nil {
 		// TODO handle this properly
@@ -35,7 +38,7 @@ func (service *transactionService) AddTransaction(newTransactions []model.Transa
 	service.transactions = append(service.transactions, newTransactions...)
 
 	// Save it to file
-	data.AddJsonToDataFile(service.transactions)
+	data.AddJsonToDataFile(transactionsFilePath, service.transactions)
 	// TODO handle failure
 
 	return newTransactions

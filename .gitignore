@@ -16,3 +16,4 @@
 
 # Temporary data store
 data/transactions.json
+data/savedPaymentSources.json
