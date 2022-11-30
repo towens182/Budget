@@ -1,12 +1,15 @@
 package model
 
 type Transaction struct {
-	Description   string  `json:"description"`
-	Cost          int     `json:"cost"`
-	Type          string  `json:"transactionType"`
-	MainCategory  string  `json:"mainCategory"`
-	SubCategory   string  `json:"subCategory"`
-	PaymentSource Payment `json:"paymentSource"`
-	Year          string  `json:"year"`
-	Month         string  `json:"month"`
+	Id                   string  `json:"id"`
+	Name                 string  `json:"name"`
+	Amount               float32 `json:"amount"`
+	Type                 string  `json:"transactionType"`
+	MainCategory         string  `json:"category"`
+	SubCategory          string  `json:"subCategory"`
+	FinancialInstitution string  `json:"financialInsitution"`
+	//PaymentSource Payment `json:"paymentSource"`
+	PostedDate string `json:"postedDate"`
+	Year       string `json:"year"`
+	Month      string `json:"month"`
 }
