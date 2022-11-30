@@ -15,9 +15,25 @@ func init() {
 	initializers.LoadEnvVaraiables()
 }
 
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Headers", "*")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
+}
+
 func main() {
 	server := gin.Default()
 
+	server.Use(CORSMiddleware())
 	server.GET("/transactions", transactionController.GetAll)
 	server.POST("/transactions", transactionController.Add)
 
